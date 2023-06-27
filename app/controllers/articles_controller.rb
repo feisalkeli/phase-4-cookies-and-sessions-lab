@@ -8,8 +8,14 @@ class ArticlesController < ApplicationController
 
   def show
     article = Article.find(params[:id])
+    session[:page_views] ||=0
+    session[:page_views] += 1
+    if session[:page_views] <5
     render json: article
+    else 
+      render json: {error: "You have reached your limit of 3 page views"}, status: :too_many_requests
   end
+end
 
   private
 
